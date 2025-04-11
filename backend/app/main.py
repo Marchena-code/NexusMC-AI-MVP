@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # Importar routers
-from .routers import auth, users, plaid, dashboard # <<<--- IMPORTAR ROUTER DASHBOARD
-# from .routers import investment, ia # Rutas relativas a 'app'
+from .routers import auth, users, plaid, dashboard, investment # <<<--- IMPORTAR ROUTER INVESTMENT
+# from .routers import ia # Rutas relativas a 'app'
 
 # Crear la instancia de la aplicación FastAPI
 app = FastAPI(
@@ -35,8 +35,8 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(users.router, prefix="/users", tags=["Users"])
 app.include_router(plaid.router, prefix="/plaid", tags=["Plaid"])
-app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"]) # <<<--- ACTIVAR ESTA LÍNEA
-# app.include_router(investment.router, prefix="/investment", tags=["Investment"])
+app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
+app.include_router(investment.router, prefix="/investment", tags=["Investment"]) # <<<--- ACTIVAR ESTA LÍNEA
 # app.include_router(ia.router, prefix="/ia", tags=["AI"])
 
 
