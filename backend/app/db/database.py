@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from .models.routers.schemas.services.config import settings # Importar la configuración
+# Importar la configuración desde la nueva ubicación
+from app.core.config import settings 
 
 # Crear la URL de conexión usando la configuración
 SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL

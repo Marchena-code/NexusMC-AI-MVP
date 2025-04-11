@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func # Para valores por defecto como now()
-from app.core.db.database import Base # Importar la Base de database.py (Usando import absoluto)
+from app.db.database import Base
 import uuid # Para generar IDs únicos si usamos UUID
 from sqlalchemy.dialects.postgresql import UUID # Específico para PostgreSQL UUID
 

@@ -26,11 +26,11 @@ import os
 # Asumiendo que env.py está en alembic/ y app/ está en el nivel superior (backend/)
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Importar la Base de nuestros modelos SQLAlchemy
-from app.core.db.database import Base
-# Importar TODOS los modelos para que Alembic los detecte
+# Importar la Base de nuestros modelos SQLAlchemy (NUEVA UBICACIÓN)
+from app.db.database import Base
+# Importar TODOS los modelos para que Alembic los detecte (NUEVA UBICACIÓN)
 # Necesitarás añadir una línea por cada archivo de modelo que crees
-from app.core.db.models import user # ¡Importante importar los modelos aquí!
+from app.models import user # ¡Importante importar los modelos aquí!
 
 # Asignar los metadatos de la Base a target_metadata para que Alembic los detecte
 target_metadata = Base.metadata
@@ -72,13 +72,13 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    # Usar el engine ya configurado en database.py
+    # Usar el engine ya configurado en database.py (NUEVA UBICACIÓN)
     # que lee la URL desde el archivo .env correctamente.
-    from app.core.db.database import engine as connectable, Base
+    from app.db.database import engine as connectable, Base
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, 
+            connection=connection,
             target_metadata=Base.metadata # Usar Base.metadata directamente
         )
 
