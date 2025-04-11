@@ -1,28 +1,24 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
-import uuid # Si usas UUID como ID
+# import uuid # Si usas UUID como ID
 from datetime import datetime
 
 # --- Esquemas Base ---
 class UserBase(BaseModel):
-    email: EmailStr # Pydantic valida que sea un email válido
+    email: EmailStr # Valida formato email
 
 # --- Esquemas para Creación ---
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=8) # Requiere contraseña con mínimo 8 caracteres
+    password: str = Field(..., min_length=8) # Campo requerido, min 8 chars
 
 # --- Esquemas para Lectura (Respuesta de API) ---
-# Esquema básico solo con ID y Email
 class UserReadBasic(UserBase):
     # id: uuid.UUID # Si usas UUID
     id: int # Si usas Integer
 
     class Config:
-        # DeprecationWarning: orm_mode está deprecado, usar from_attributes=True
-        # orm_mode = True
-        from_attributes = True # Permite crear el esquema desde un objeto ORM (SQLAlchemy)
+        from_attributes = True # Permite crear desde objeto SQLAlchemy
 
-# Esquema completo con datos de perfil para devolver desde /users/me
 class UserReadProfile(UserReadBasic):
     age: Optional[int] = None
     primary_goal: Optional[str] = None
@@ -34,19 +30,13 @@ class UserReadProfile(UserReadBasic):
 
 # --- Esquemas para Actualización ---
 class UserProfileUpdate(BaseModel):
-    age: Optional[int] = None
+    age: Optional[int] = Field(None, gt=0) # Opcional, mayor que 0 si se provee
     primary_goal: Optional[str] = None
     esg_interest: Optional[bool] = None
 
-    # Añadir validaciones si es necesario, ej. para age > 0
-
-# --- Esquema Interno (si es necesario para dependencias) ---
-# No es estrictamente necesario ahora mismo, pero podría ser útil más adelante
-class UserInDBBase(UserBase):
-    # id: uuid.UUID # Si usas UUID
-    id: int # Si usas Integer
-    hashed_password: str
-
-    class Config:
-        # orm_mode = True
-        from_attributes = True
+# --- Esquema Interno (No estrictamente necesario ahora) ---
+# class UserInDBBase(UserBase):
+#     id: int
+#     hashed_password: str
+#     class Config:
+#         from_attributes = True

@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-# Importar la configuración desde la nueva ubicación
+# Cambio: importar Base de sqlalchemy.orm directamente si no usas legacy
+# from sqlalchemy.ext.declarative import declarative_base # Comentado como en la instrucción
+from sqlalchemy.orm import sessionmaker, declarative_base
+# Corregir la importación para que sea absoluta desde la nueva estructura
 from app.core.config import settings 
 
 # Crear la URL de conexión usando la configuración
@@ -33,4 +34,16 @@ def get_db():
     finally:
         db.close() # Cierra la sesión después de que la solicitud termine
 
-print(f"SQLAlchemy Engine creado para URL: {SQLALCHEMY_DATABASE_URL[:SQLALCHEMY_DATABASE_URL.find('@')] + '@...masked...'}") # Imprime URL enmascarada al iniciar
+# Enmascarar contraseña antes de imprimir
+try:
+    masked_url_parts = SQLALCHEMY_DATABASE_URL.split('@')
+    if len(masked_url_parts) > 1:
+        user_part = masked_url_parts[0].split('//')[-1].split(':')[0]
+        host_part = masked_url_parts[1]
+        masked_url = f"postgresql://{user_part}:***@{host_part}"
+    else:
+        masked_url = SQLALCHEMY_DATABASE_URL # No parece tener formato user:pass@host
+except Exception:
+    masked_url = "[Error al enmascarar URL]"
+
+print(f"DEBUG: SQLAlchemy Engine creado para URL: {masked_url}") # Imprime URL enmascarada al iniciar

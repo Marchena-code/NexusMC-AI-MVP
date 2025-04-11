@@ -1,35 +1,37 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # Importar routers más adelante cuando los creemos
-# from .routers import auth, users, plaid, dashboard, investment, ia
+# from .routers import auth, users, plaid, dashboard, investment, ia # Rutas relativas a 'app'
 
 # Crear la instancia de la aplicación FastAPI
 app = FastAPI(
     title="NexusMC AI API",
     description="API para la plataforma NexusMC AI - MVP",
-    version="0.1.0",
+    version="0.1.0", # Versión inicial
 )
 
 # Configuración de CORS (Cross-Origin Resource Sharing)
 # Permite que el frontend (ej. ejecutándose en localhost:3000)
 # se comunique con el backend (ej. ejecutándose en localhost:8000)
 origins = [
-    "http://localhost",       # Origen común para desarrollo local
-    "http://localhost:8080",  # Otro puerto común de desarrollo frontend
-    "http://localhost:3000",  # Puerto común para React
-    # Añadir aquí la URL del frontend desplegado en el futuro
+    "http://localhost",       # Base localhost
+    "http://localhost:8080",  # Puerto común dev frontend
+    "http://localhost:3000",  # Puerto común React
+    "http://localhost:19006", # Puerto común Expo Web
+    # Añadir aquí la URL del frontend desplegado en el futuro si es necesario
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # Lista de orígenes permitidos
-    allow_credentials=True, # Permite cookies (si las usas)
-    allow_methods=["*"],    # Permite todos los métodos (GET, POST, etc.)
-    allow_headers=["*"],    # Permite todas las cabeceras
+    allow_credentials=True, # Permite cookies/auth headers
+    allow_methods=["*"],    # Permite todos los métodos HTTP
+    allow_headers=["*"],    # Permite todas las cabeceras HTTP
 )
 
-# --- Incluir Routers ---
+# --- Incluir Routers (Placeholders) ---
 # Descomentar e incluir cada router a medida que los creemos
+# Asegúrate de que los archivos de router existan en app/routers/
 # app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 # app.include_router(users.router, prefix="/users", tags=["Users"])
 # app.include_router(plaid.router, prefix="/plaid", tags=["Plaid"])
@@ -38,12 +40,17 @@ app.add_middleware(
 # app.include_router(ia.router, prefix="/ia", tags=["AI"])
 
 
-# --- Endpoint Raíz (Prueba) ---
+# --- Endpoint Raíz (Prueba de Salud) ---
 @app.get("/")
 async def read_root():
-    """Endpoint raíz para verificar que la API está funcionando."""
+    """
+    Endpoint raíz para verificar rápidamente que la API está activa.
+    """
     return {"message": "NexusMC AI Backend is running!"}
 
-# --- Ejecutar con Uvicorn (para desarrollo local) ---
-# Puedes ejecutar desde la terminal con: uvicorn app.main:app --reload --port 8000
-# El flag --reload hace que el servidor se reinicie automáticamente con los cambios.
+# --- Ejecutar con Uvicorn ---
+# Desde la terminal, dentro de la carpeta 'backend' (con venv activado):
+# uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+# --reload: Reinicia automáticamente al guardar cambios.
+# --host 0.0.0.0: Permite acceso desde fuera de localhost (útil para emulador/dispositivo físico).
+# --port 8000: Puerto estándar para APIs.
