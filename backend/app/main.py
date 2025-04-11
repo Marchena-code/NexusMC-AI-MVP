@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# Importar routers más adelante cuando los creemos
-from .routers import auth # <<<---- IMPORTAR ROUTER AUTH
-# from .routers import users, plaid, dashboard, investment, ia # Rutas relativas a 'app'
+# Importar routers
+from .routers import auth, users # <<<--- IMPORTAR ROUTER USERS
+# from .routers import plaid, dashboard, investment, ia # Rutas relativas a 'app'
 
 # Crear la instancia de la aplicación FastAPI
 app = FastAPI(
@@ -32,8 +32,8 @@ app.add_middleware(
 
 # --- Incluir Routers --- 
 # Asegúrate de que los archivos de router existan en app/routers/
-app.include_router(auth.router, prefix="/auth", tags=["Auth"]) # <<<--- ACTIVAR ESTA LÍNEA
-# app.include_router(users.router, prefix="/users", tags=["Users"])
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(users.router, prefix="/users", tags=["Users"]) # <<<--- ACTIVAR ESTA LÍNEA
 # app.include_router(plaid.router, prefix="/plaid", tags=["Plaid"])
 # app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 # app.include_router(investment.router, prefix="/investment", tags=["Investment"])
